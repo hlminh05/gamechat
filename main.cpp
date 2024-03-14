@@ -1,7 +1,7 @@
 #include "gameloop.h"
 
 Gameloop* g = new Gameloop();
-const int FPS = 100;
+const int FPS = 120;
     const int frameDelay=1000/FPS;
 
     Uint32 frameStart;

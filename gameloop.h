@@ -13,11 +13,10 @@ class Gameloop{
         bool GameState;
         SDL_Event event;
         player *chim;
-        SDL_Texture* player1;
-        SDL_Texture* player2;
-        SDL_Texture* player3;
+        player *base;
+        player* bkg;
         SDL_Texture* background;
-        SDL_Texture* base;
+        //SDL_Texture* base;
         SDL_Rect point, draw;
     public:
     // static SDL_Rect dest;

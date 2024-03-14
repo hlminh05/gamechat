@@ -3,21 +3,24 @@
 #include"Object.h"
 class player : public object{
     private:
-        double gravity = 0.2;
-        int Ypos = 0;
-        double accelerator1 = 0;
-        double accelerator2 = 0;
-        bool inJump = false;
-        double jumpHeight = -6;
-        double jumpTimer;
-        double lastJump = 0;
-        SDL_Texture* Tex1;
-        SDL_Texture* Tex2;
+        double gravity = 0.15;
+        int Ypos = 80;
+        int Xbase = 0;
+        int Xbkg = 0;
+        double jumpHeight = 0;
+        //SDL_Texture* text;
     public:
+        double fly = 0;
         void Gravity();
-        bool JumpState();
         int getYpos();
+        void Render(SDL_Renderer* ren,int x);
+        void Jump();
+        SDL_Texture* Texts[3];
+        SDL_Texture* text;
+        SDL_Texture* text1;
         void Render(SDL_Renderer* ren);
-
+        void tele();
+        void tele1();
+        void Render1(SDL_Renderer* ren);
 
 };
