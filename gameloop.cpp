@@ -1,5 +1,51 @@
 #include"gameloop.h"
 
+
+// bool inJump = false;
+// double jumpHeight = -6;
+// double gravity = 0.2; // gia toc
+// double acc = 0;
+// int ypos = 100;
+// int lastJump = 0;
+// int jumpTimer;
+// SDL_Rect Gameloop::dest={0,0,0,0};
+
+// void G()
+// {
+//     if(inJump)
+//     {
+//         acc+=0.035*2;
+//         jumpHeight += gravity;
+//         ypos += gravity + acc + jumpHeight;
+//         if(ypos>400)ypos=400;
+//         Gameloop::SetDest({90,ypos,34,24});
+//         if(jumpHeight > 0){
+//             jumpHeight = -6;
+//             inJump = false;
+//         }
+        
+//     }
+//     else {
+//         acc +=0.035*2;
+//         ypos += gravity + acc;
+//         if(ypos>400)ypos=400;
+//         Gameloop::SetDest({90,ypos,34,24});
+//     }
+// }
+// void jump()
+// {
+//     if (jumpTimer - lastJump > 30)
+// 	{
+// 		acc = 0;
+// 		inJump = true;
+// 		lastJump = jumpTimer;
+// 	}
+    
+// }
+
+// void Gameloop::SetDest(SDL_Rect ndest){
+//     dest = ndest;
+// }
 Gameloop::Gameloop(){
     window = NULL;
     renderer = NULL;
@@ -9,15 +55,20 @@ Gameloop::Gameloop(){
 bool Gameloop::GetGameState(){
     return GameState;
 }
- void Gameloop::Intialize(){
+ void Gameloop::Initialize(){
     SDL_Init(SDL_INIT_EVERYTHING);
-    window = SDL_CreateWindow("Flappy nigga",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,WIDTH,HEIGHT,SDL_WINDOW_RESIZABLE);
+    window = SDL_CreateWindow("Flappy nigga",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,WIDTH,HEIGHT,0);
     if(window){
         renderer = SDL_CreateRenderer(window,-1 ,0);
         if(renderer){
             std::cout << "created!" << std::endl;
             GameState = true;
-            player = TextureManager::Texture("img/yellowbird-downflap.png", renderer);
+            chim=new player;// tao chim kieu player
+            chim->CreateTexture("img/yellowbird-upflap.png",renderer);
+            chim->setSrc(0,0,34,24);
+            // player1 = TextureManager::Texture("img/yellowbird-upflap.png", renderer);
+            // player2 = TextureManager::Texture("img/yellowbird-midflap.png", renderer);
+            // player3 = TextureManager::Texture("img/yellowbird-downflap.png", renderer);
             background = TextureManager::Texture("img/background-day.png", renderer);
             base = TextureManager::Texture("img/base.png", renderer);
         }
@@ -26,34 +77,6 @@ bool Gameloop::GetGameState(){
     else{
         std::cout << "window not created!"<< std::endl;
     }
-}
-
-void Gameloop::Event(){
-     SDL_PollEvent(&event);
-    if(event.type == SDL_QUIT){
-        GameState = false;
-    }
-    if(event.type == SDL_MOUSEMOTION){
-        std::cout <<event.motion.x << " " <<event.motion.y<< std::endl;
-    }
-    if(event.type == SDL_MOUSEBUTTONDOWN){
-        std::cout << "press start!" << std::endl;
-    }
-    if(event.type == SDL_KEYDOWN){
-        if(event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_SPACE)
-        {
-        std::cout << "press start!" << std::endl;
-        }
-    }
-}
-void Gameloop::Update(){
-    src.h = 24;
-    src.w = 34;
-    src.x = src.y = 0;
-
-    dest.h = 24;
-    dest.w = 34;
-    dest.x = dest.y = 10;
 
 
     point.w = 336;
@@ -66,12 +89,46 @@ void Gameloop::Update(){
     draw.y = HEIGHT - 112;
 }
 
+void Gameloop::Event(){
+    // jumpTimer = SDL_GetTicks();
+     SDL_PollEvent(&event);
+    if(event.type == SDL_QUIT){
+        GameState = false;
+    }
+    if(event.type == SDL_MOUSEMOTION){
+        std::cout <<event.motion.x << " " <<event.motion.y<< std::endl;
+    }
+    if(event.type == SDL_MOUSEBUTTONDOWN){
+        // if (!inJump)
+		// 	{
+		// 		jump();
+		// 	}
+        std::cout << "press start!" << std::endl;
+        
+    }
+    if(event.type == SDL_KEYDOWN){
+        if(event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_SPACE)
+        {
+            
+            // if (!inJump)
+			// {
+			// 	jump();
+			// }
+
+        std::cout << "press start!" << std::endl;
+        }
+    }
+}
+void Gameloop::Update(){
+    chim->Gravity();
+}
+
 void Gameloop::Render(){
     SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, background, NULL,NULL);
-    SDL_RenderCopy(renderer,base, &point,&draw);
-    SDL_RenderCopy(renderer, player, &src, &dest);
-    SDL_RenderPresent(renderer);
+        SDL_RenderCopy(renderer, background, NULL,NULL);
+        SDL_RenderCopy(renderer,base, &point,&draw);
+        chim->Render(renderer);
+        SDL_RenderPresent(renderer);
     
 }
 
