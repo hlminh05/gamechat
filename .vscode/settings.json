@@ -68,5 +68,12 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "valarray": "cpp"
-    }
+    },
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "c:\\Users\\DELL\\Documents\\GitHub\\gamechat",
+            "binaryPath": "c:\\Users\\DELL\\Documents\\GitHub\\gamechat\\main",
+            "binaryArgs": []
+        }
+    ]
 }

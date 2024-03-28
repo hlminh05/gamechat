@@ -6,7 +6,7 @@ Gameloop::Gameloop(){
     GameState = false;
 
 }
-//272
+
 bool Gameloop::GetGameState(){
     return GameState;
 }
@@ -27,14 +27,26 @@ bool Gameloop::GetGameState(){
             
             chim->setSrc(0,0,34,24);
             base->setSrc(0,0,336,112);
-            // base->setDest(0,HEIGHT-112,900,112);
+            //base->setDest(0,HEIGHT-112,900,112);
             bkg = new player;
-            bkg->text1 = TextureManager::Texture("img/bg.png", renderer);
-            //background = TextureManager::Texture("img/bg.png", renderer);
-            //base = TextureManager::Texture("img/base.png", renderer);
-            bkg->setSrc(0,0,450,512);  
-            bkg->setDest(0,0,450,512);       
-
+            bkg->text = TextureManager::Texture("img/bg.png", renderer);
+            bkg->setSrc(0,0,1108,512);  
+            bkg->setDest(0,0,642,510);
+            Pipe = new pipe;  
+            Pipe->init("img/sword.png",renderer,450); 
+            Pipe1 = new pipe;  
+            Pipe1->init("img/sword.png",renderer,580); 
+            Pipe2 = new pipe;  
+            Pipe2->init("img/sword.png",renderer,710);     
+            Pipe3 = new pipe;  
+            Pipe3->init("img/sword.png",renderer,840);     
+            Pipe4 = new pipe;  
+            Pipe4->init("img/sword.png",renderer,970);
+            Pipe5 = new pipe;  
+            Pipe5 ->init("img/sword.png",renderer,1100);
+            rocket = new pipe;
+            rocket->init("img/rocket.png",renderer);
+            std::cout<<"load ddc"<<std::endl;  
         }
         else std::cout << "not created!" << std::endl;
     }
@@ -68,16 +80,28 @@ void Gameloop::Update(){
      chim->Gravity();
      base->tele();
      bkg->tele1();
+     Pipe1->update(1);
+     Pipe->update(1);
+     Pipe2->update(1);
+     Pipe3->update(1);
+     Pipe4->update(1);
+     Pipe5->update(3);
+     rocket->updatefly();
 }
 
 void Gameloop::Render(){
     SDL_RenderClear(renderer);
-         //SDL_RenderCopy(renderer, background, NULL,NULL);
-        //SDL_RenderCopy(renderer,base, &point,&draw);
-        bkg->Render1(renderer);
+        bkg->Render(renderer);
         base->Render(renderer);
+        Pipe1->render(renderer);
+        Pipe->render(renderer);
+        Pipe2->render(renderer);
+        Pipe3->render(renderer);
+        Pipe4->render(renderer);
+        Pipe5->render(renderer);
+        rocket->render(renderer);
         chim-> Render(renderer, (int)chim->fly);
-        chim->fly+= 0.05;// ép kiểu nguyên để ảnh chuyển lâu hơn
+        chim->fly+= 0.05;// ép kiểu nguyên để ảnh chim chuyển lâu hơn
         if (chim->fly>=3) chim->fly = 0;
         SDL_RenderPresent(renderer);
     

@@ -2,12 +2,13 @@
 #include "Header.cpp"
 #include "TextureManager.h"
 #include"player.h"
+#include"pipe.h"
 class Gameloop{
     private:
         int HEIGHT = 512;
-        int WIDTH = 450;
-        // int HEIGHT = 512;
-        // int WIDTH = 450;
+        //int WIDTH = 450;
+        // int HEIGHT = 600;
+         int WIDTH = 624;
         SDL_Window* window;
         SDL_Renderer* renderer;
         bool GameState;
@@ -15,8 +16,14 @@ class Gameloop{
         player *chim;
         player *base;
         player* bkg;
+        pipe* Pipe;
+        pipe* Pipe1;
+        pipe* Pipe2;
+        pipe* Pipe3;
+        pipe* Pipe4;
+        pipe* Pipe5;
+        pipe* rocket;
         SDL_Texture* background;
-        //SDL_Texture* base;
         SDL_Rect point, draw;
     public:
     // static SDL_Rect dest;
