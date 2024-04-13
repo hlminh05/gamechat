@@ -1,38 +1,47 @@
 #pragma once
 #include "Header.cpp"
 #include "TextureManager.h"
-#include"player.h"
-#include"pipe.h"
-class Gameloop{
-    private:
-        int HEIGHT = 512;
-        //int WIDTH = 450;
-        // int HEIGHT = 600;
-         int WIDTH = 624;
-        SDL_Window* window;
-        SDL_Renderer* renderer;
-        bool GameState;
-        SDL_Event event;
-        player *chim;
-        player *base;
-        player* bkg;
-        pipe* Pipe;
-        pipe* Pipe1;
-        pipe* Pipe2;
-        pipe* Pipe3;
-        pipe* Pipe4;
-        pipe* Pipe5;
-        pipe* rocket;
-        SDL_Texture* background;
-        SDL_Rect point, draw;
-    public:
-    // static SDL_Rect dest;
-        //static void SetDest(SDL_Rect ndest);
-        bool GetGameState();
-        Gameloop();
-        void Initialize();
-        void Event();
-        void Render();
-        void Clear();
-        void Update();
+#include "player.h"
+#include "pipe.h"
+#include "item.h"
+#include "bkg.h"
+#include <vector>
+class Gameloop
+{
+private:
+public:
+    static int FPS;
+    static int timer;
+    static int HEIGHT;
+    static int WIDTH;
+    static SDL_Window *window;
+    static SDL_Renderer *renderer;
+    static bool GameState;
+    static SDL_Event event;
+    bool GetGameState();
+    Gameloop();
+
+    static void CreateWindow();
+
+    static std::vector<bkg *> BKG;
+    static std::vector<item *> ITEM;
+    static std::vector<player *> PLAYER;
+    static std::vector<pipe *> PIPE;
+
+    bool inSpecial = false;
+    const int timeSpecial = 6000;
+    short start_Special = -5000;
+    static int score;
+    int HightScore;
+    int breakout = 0;
+
+    void Initialize();
+    void addItem(bool t = true);
+    void clearItem();
+    void Event();
+    void Update();
+    void Render();
+    void Close();
+
+    void Clear();
 };

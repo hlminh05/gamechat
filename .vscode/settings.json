@@ -75,5 +75,7 @@
             "binaryPath": "c:\\Users\\DELL\\Documents\\GitHub\\gamechat\\main",
             "binaryArgs": []
         }
-    ]
+    ],
+    "editor.defaultFormatter": "ms-vscode.cpptools",
+    "editor.formatOnSave": true
 }

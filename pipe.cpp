@@ -1,47 +1,18 @@
-#include"pipe.h"
-void pipe::init(const char* path, SDL_Renderer* ren,int x){
-    CreateTexture(path, ren);
-    SDL_Texture* tex = getTexture();
-    setSrc(0,0,64,64);
-    xPos = x;
-    setDest(xPos,300,52,100);
-}
-void pipe:: init(const char* path,SDL_Renderer*nen){
-    CreateTexture(path, nen);
-    SDL_Texture* tex = getTexture();
-    srand(time(0));
-    setSrc(0,0,612,612);
-    xPos = 642;
-    yPos = 0;
-    setDest(xPos,yPos,70,80);
+#include "pipe.h"
+#include "gameloop.h"
 
-}
-void pipe:: updatefly(){
-    xPos-=9;
-    setDest(xPos,yPos,70,80);
-    if(xPos < -70){
-        xPos = 642;
-        yPos = rand() % 330;
-    }
-}
-
-void pipe:: update(int sp)
+pipe::pipe()
 {
-    xPos-= sp;
-    setDest(xPos,300,52,100);
-    if(xPos < -52)
+    Gameloop::PIPE.push_back(this);
+}
+
+void pipe::move()
+{
+
+    x -= speed_pipe / item::slow;
+    if (x < -dest.w)
     {
-        xPos = 642;
+        x = Gameloop::WIDTH;
+        // y = 400 - dest.h;
     }
-}
-
-void pipe:: render(SDL_Renderer*ren)
-{
-    SDL_Rect src = getSrc();
-	SDL_Rect dest = getDest();
-   
-    
-	SDL_RenderCopy(ren, getTexture(), &src, &dest);
-    
-
 }

@@ -1,113 +1,351 @@
-#include"gameloop.h"
+#include "gameloop.h"
+#include "Object.h"
+#include "bkg.h"
 
-Gameloop::Gameloop(){
+int Gameloop::score = 0;
+int Gameloop::timer = 0;
+int Gameloop::FPS = 120;
+int Gameloop::HEIGHT = 512;
+int Gameloop::WIDTH = 624;
+SDL_Window *Gameloop::window = nullptr;
+SDL_Renderer *Gameloop::renderer = nullptr;
+bool Gameloop::GameState = false;
+SDL_Event Gameloop::event;
+std::vector<bkg *> Gameloop::BKG;
+std::vector<item *> Gameloop::ITEM;
+std::vector<player *> Gameloop::PLAYER;
+std::vector<pipe *> Gameloop::PIPE;
+
+SDL_Texture *texScore = nullptr;
+SDL_Rect srcScore, destScore;
+SDL_Texture *texHScore = nullptr;
+SDL_Rect srcHScore, destHScore;
+
+Gameloop::Gameloop()
+{
     window = NULL;
     renderer = NULL;
     GameState = false;
-
 }
 
-bool Gameloop::GetGameState(){
+bool Gameloop::GetGameState()
+{
     return GameState;
 }
- void Gameloop::Initialize(){
+
+void Gameloop::CreateWindow()
+{
     SDL_Init(SDL_INIT_EVERYTHING);
-    window = SDL_CreateWindow("Flappy nigga",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,WIDTH,HEIGHT,0);
-    if(window){
-        renderer = SDL_CreateRenderer(window,-1 ,0);
-        if(renderer){
+    window = SDL_CreateWindow("Flappy nigga", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, 0);
+    if (window)
+    {
+        renderer = SDL_CreateRenderer(window, -1, 0);
+        if (renderer)
+        {
             std::cout << "created!" << std::endl;
             GameState = true;
-            chim=new player;// tao chim kieu player
-            base = new player;
-            base->text = TextureManager::Texture("img/base.png", renderer);
-            for(int i = 0;i < 3;i++){
-                chim-> Texts[i] = TextureManager::Texture(("img/" + std::to_string(i) + ".png").c_str(),renderer);
-            }
-            
-            chim->setSrc(0,0,34,24);
-            base->setSrc(0,0,336,112);
-            //base->setDest(0,HEIGHT-112,900,112);
-            bkg = new player;
-            bkg->text = TextureManager::Texture("img/bg.png", renderer);
-            bkg->setSrc(0,0,1108,512);  
-            bkg->setDest(0,0,642,510);
-            Pipe = new pipe;  
-            Pipe->init("img/sword.png",renderer,450); 
-            Pipe1 = new pipe;  
-            Pipe1->init("img/sword.png",renderer,580); 
-            Pipe2 = new pipe;  
-            Pipe2->init("img/sword.png",renderer,710);     
-            Pipe3 = new pipe;  
-            Pipe3->init("img/sword.png",renderer,840);     
-            Pipe4 = new pipe;  
-            Pipe4->init("img/sword.png",renderer,970);
-            Pipe5 = new pipe;  
-            Pipe5 ->init("img/sword.png",renderer,1100);
-            rocket = new pipe;
-            rocket->init("img/rocket.png",renderer);
-            std::cout<<"load ddc"<<std::endl;  
         }
-        else std::cout << "not created!" << std::endl;
+        else
+            std::cout << "not created!" << std::endl;
     }
-    else{
-        std::cout << "window not created!"<< std::endl;
+    else
+    {
+        std::cout << "window not created!" << std::endl;
+    }
+    TTF_Init();
+    TextureManager::font = TTF_OpenFont("font/font2.ttf", 24);
+    TextureManager::color = {255, 255, 255};
+}
+
+void Gameloop::addItem(bool t)
+{
+    item *it;
+    if (t)
+    {
+        it = new item;
+        it->SetImage("img/rocket.png");
+        it->SetPos(-100, rand() % (400 - it->dest.h));
+        it->space = 800;
+        it->type = "rocket";
+        it->SetScale(0.15);
+        it->speed_item = 1;
+
+        it = new item;
+        it->SetImage("img/bnn.png");
+        it->SetPos(-100, rand() % (400 - it->dest.h));
+        it->type = "chuoi";
+        it->space = 1800;
+        it->val = 1;
+        it->SetScale(0.2);
+        it->speed_item = 5;
+
+        it = new item;
+        it->SetImage("img/special.png");
+        it->SetPos(-100, rand() % (400 - it->dest.h));
+        it->type = "special";
+        it->val = 10;
+        it->space = 10000;
+        it->SetScale(2);
+        it->speed_item = 8;
+
+        it = new item;
+        it->SetImage("img/bomb.png");
+        it->SetPos(-100, rand() % (400 - it->dest.h));
+        it->type = "bom";
+        it->space = 800;
+        it->SetScale(1);
+        it->speed_item = 2;
+    }
+    it = new item;
+    it->SetImage("img/apple.png");
+    it->type = "tao";
+    it->space = 800;
+    it->val = 5;
+    it->SetPos(-100, rand() % (400 - it->dest.h));
+    it->SetScale(0.8);
+    it->speed_item = 4;
+
+    it = new item;
+    it->SetImage("img/luu.png");
+    it->SetPos(-100, rand() % (400 - it->dest.h));
+    it->type = "luu";
+    it->val = 3;
+    it->space = 800;
+    it->SetScale(0.8);
+    it->speed_item = 3;
+}
+
+void Gameloop::clearItem()
+{
+    auto it = ITEM.begin();
+    while (it != ITEM.end())
+    {
+        if ((*it)->type == "rocket" || (*it)->type == "chuoi" || (*it)->type == "bom" || (*it)->type == "special")
+        {
+            ITEM.erase(it);
+        }
+        else
+            it++;
     }
 }
 
-void Gameloop::Event(){
-     SDL_PollEvent(&event);
-    if(event.type == SDL_QUIT){
+void Gameloop::Initialize()
+{
+    std::string HSCORE;
+    std::ifstream o;
+    o.open("font/hightscore.txt");
+    o >> HightScore;
+    HSCORE = "Hight Score : " + std::to_string(HightScore);
+    o.close();
+    texHScore = TextureManager::LoadText(HSCORE.c_str(), srcHScore);
+    destHScore = {WIDTH - srcHScore.w - 20, 6, srcHScore.w, srcHScore.h};
+    destScore.x = 5;
+    destScore.y = 6;
+    timer = 0;
+
+    srand(time(NULL));
+    bkg *bk = new bkg;
+    bk->SetImage("img/bg.png");
+    bk->SetPos(0, 0);
+    bk->SetRect(Gameloop::WIDTH * 2, Gameloop::HEIGHT);
+    bk->speed = 1;
+
+    bk = new bkg;
+    bk->SetImage("img/base.png");
+    bk->SetPos(0, 400);
+    bk->SetRect(Gameloop::WIDTH * 2, bk->getDest().h);
+    bk->speed = 2;
+
+    player *chim = new player;
+    chim->SetImage("img/chim.png");
+    chim->init(3, 100);
+    chim->SetPos(50, 50);
+
+    pipe *pp;
+    for (int i = 0; i < 1; i++)
+    {
+        pp = new pipe;
+        pp->SetImage("img/sword.png");
+        pp->SetScale(0.5);
+        pp->speed_pipe = 5;
+        pp->SetPos(100, 400 - pp->getDest().h);
+    }
+
+    addItem(true);
+    addItem(true);
+
+    GameState = true;
+}
+
+void Gameloop::Event()
+{
+    SDL_PollEvent(&event);
+    if (event.type == SDL_QUIT)
+    {
         GameState = false;
     }
-    if(event.type == SDL_MOUSEBUTTONDOWN){
-                chim->Jump();
+    if (event.type == SDL_MOUSEBUTTONDOWN)
+    {
         std::cout << "press start!" << std::endl;
-        
     }
-    if(event.type == SDL_KEYDOWN){
-        if(event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_SPACE)
+    if (event.type == SDL_KEYDOWN)
+    {
+
+        if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_SPACE)
         {
-            
-                chim->Jump();
-                
+            for (auto &chim : PLAYER)
+            {
+                chim->jump();
+            }
+            std::cout << "press start!" << std::endl;
         }
-        
-        std::cout << "press start!" << std::endl;
     }
 }
-void Gameloop::Update(){
-     chim->Gravity();
-     base->tele();
-     bkg->tele1();
-     Pipe1->update(1);
-     Pipe->update(1);
-     Pipe2->update(1);
-     Pipe3->update(1);
-     Pipe4->update(1);
-     Pipe5->update(3);
-     rocket->updatefly();
+
+void Gameloop::Update()
+{
+    if (texScore != nullptr)
+        SDL_DestroyTexture(texScore);
+    std::string SC = "Score : " + std::to_string(score) + " - break: " + std::to_string(breakout);
+    texScore = TextureManager::LoadText(SC.c_str(), srcScore);
+    destScore.w = srcScore.w;
+    destScore.h = srcScore.h;
+    for (auto &pp : PIPE)
+    {
+        pp->move();
+        pp->FixData();
+        if (PLAYER.back()->Collision(pp->dest))
+        {
+            GameState = false;
+        }
+    }
+
+    if (inSpecial && (timer - start_Special) * 1000 / FPS > timeSpecial)
+    {
+        inSpecial = false;
+        ITEM.clear();
+        addItem(1);
+        addItem(1);
+    }
+    else if (inSpecial && (timer - start_Special) % 100 == 0)
+        addItem(false);
+    // if (timer == FPS * 10000 / 1000)
+    //     addItem(true);
+
+    for (auto &bk : BKG)
+    {
+        bk->slip();
+        bk->FixData();
+    }
+    for (auto &player : PLAYER)
+    {
+        player->update();
+        player->FixData();
+    }
+    for (auto &item : ITEM)
+    {
+        if (item->type == "bom" || item->type == "rocket")
+        {
+            if (item->speed_item < 7)
+            {
+                item->speed_item += 0.001;
+            }
+        }
+        item->tele();
+        item->FixData();
+        for (auto &player : PLAYER)
+        {
+            if (item->Collision(player->dest))
+            {
+                item->respawn();
+                if (item->type == "tao")
+                {
+                    player->scale += 0.25;
+                    if (player->scale >= 2.25)
+                        Gameloop::breakout = 1;
+                }
+
+                else if (item->type == "special")
+                {
+                    clearItem();
+                    inSpecial = true;
+                    start_Special = timer;
+                }
+
+                else if (item->type == "chuoi")
+                {
+
+                    item->SlowAllItem(3000);
+                }
+
+                else if (item->type == "luu")
+                {
+                    player->scale -= 0.25;
+                    if (player->scale < 0.5)
+                        player->scale = 0.5;
+                }
+                else if (item->type == "bom" || item->type == "rocket")
+                {
+                    if (player->scale >= 2.25)
+                    {
+                        player->scale = 1;
+                        item->val = -10;
+                        breakout--;
+                    }
+                    else
+                    {
+                        item->val = 0;
+                        Gameloop::GameState = false;
+                    }
+                }
+            }
+        }
+    }
 }
 
-void Gameloop::Render(){
+void Gameloop::Render()
+{
     SDL_RenderClear(renderer);
-        bkg->Render(renderer);
-        base->Render(renderer);
-        Pipe1->render(renderer);
-        Pipe->render(renderer);
-        Pipe2->render(renderer);
-        Pipe3->render(renderer);
-        Pipe4->render(renderer);
-        Pipe5->render(renderer);
-        rocket->render(renderer);
-        chim-> Render(renderer, (int)chim->fly);
-        chim->fly+= 0.05;// ép kiểu nguyên để ảnh chim chuyển lâu hơn
-        if (chim->fly>=3) chim->fly = 0;
-        SDL_RenderPresent(renderer);
-    
+
+    for (auto &bk : BKG)
+    {
+        bk->Draw();
+    }
+    for (auto &player : PLAYER)
+    {
+        player->Draw();
+    }
+    for (auto &item : ITEM)
+    {
+        item->Draw();
+    }
+    for (auto &pp : PIPE)
+    {
+        pp->Draw();
+    }
+    for (auto &pp : PIPE)
+    {
+        pp->Draw();
+    }
+    SDL_RenderCopy(Gameloop::renderer, texScore, NULL, &destScore);
+    SDL_RenderCopy(Gameloop::renderer, texHScore, NULL, &destHScore);
+
+    SDL_RenderPresent(renderer);
 }
 
-void Gameloop::Clear(){
+void Gameloop::Close()
+{
+}
+
+void Gameloop::Clear()
+{
+    if (score > HightScore)
+    {
+        std::ofstream o;
+        o.open("font/hightscore.txt");
+        o << score;
+        o.close();
+    }
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 }

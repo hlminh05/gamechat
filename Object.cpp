@@ -1,51 +1,56 @@
-#include"Object.h"
-#include"TextureManager.h"
-object::object()
+#include "Object.h"
+#include "TextureManager.h"
+
+void object::FixData()
 {
-    Tex = NULL;
+	dest.x = int(x);
+	dest.y = int(y);
+	dest.h = height * scale;
+	dest.w = width * scale;
 }
 
-SDL_Rect object::getSrc()
+void object::SetRect(int w, int h)
 {
-	return src1;
+	width = w;
+	height = h;
+}
+
+void object::SetImage(const char *address)
+{
+	image = TextureManager::LoadImage(address, src);
+	dest = src;
+	width = src.w;
+	height = src.h;
+}
+
+void object::Draw()
+{
+
+	SDL_RenderCopy(Gameloop::renderer, image, &src, &dest);
+}
+
+void object::SetPos(double x, double y)
+{
+	this->x = x;
+	this->y = y;
+}
+void object::SetScale(double x)
+{
+	scale = x;
+	FixData();
 }
 
 SDL_Rect object::getDest()
 {
-	return dest1;
+	return dest;
 }
 
-
-void object::setSrc(int x, int y, int w, int h)
+bool object::Collision(SDL_Rect A)
 {
-	src1.x = x;
-	src1.y = y;
-	src1.h = h;
-	src1.w = w;
+	SDL_Rect B = dest;
+	return !(
+		A.x > B.x + B.w ||
+		A.y > B.y + B.h ||
+		B.x > A.x + A.w ||
+		B.y > A.y + A.h);
 }
-
-void object::setDest(int x, int y, int w, int h)
-{
-	dest1.x = x;
-	dest1.y = y;
-	dest1.h = h;
-	dest1.w = w;
-}
-void object::CreateTexture(const char* address,SDL_Renderer* ren)
-{
-	Tex = TextureManager::Texture(address, ren);
-
-}
-SDL_Texture* object:: getTexture(){
-    return Tex;
-}
-
-// bool object:: Collision(SDL_Rect A, SDL_Rect B)
-// {
-// 	return !(
-// 		A.x > B.x + B.w ||
-// 		A.y > B.y + B.h ||	
-// 		B.x > A.x + A.w ||	
-// 		B.y > A.y + A.h	
-// 	);
-// }

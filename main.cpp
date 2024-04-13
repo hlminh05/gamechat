@@ -1,27 +1,30 @@
 #include "gameloop.h"
 
-Gameloop* g = new Gameloop();
-const int FPS = 120;
-    const int frameDelay=1000/FPS;
+Gameloop *g = new Gameloop();
+const int FPS = Gameloop::FPS;
+const int frameDelay = 1000 / FPS;
 
-    Uint32 frameStart;
-    int frameTime;
-int main(int argc, char* args[]) {
-    g -> Initialize();
-    while(g->GetGameState()){
+Uint32 frameStart;
+int frameTime;
+int main(int argc, char *args[])
+{
+    Gameloop::CreateWindow();
 
-        frameStart=SDL_GetTicks();
+    g->Initialize();
+    while (g->GetGameState())
+    {
+
+        frameStart = SDL_GetTicks();
+        Gameloop::timer++;
         g->Event();
         g->Update();
         g->Render();
-        
-        
 
-        frameTime=SDL_GetTicks()-frameStart;
+        frameTime = SDL_GetTicks() - frameStart;
 
-        if(frameTime<frameDelay)
+        if (frameTime < frameDelay)
         {
-            SDL_Delay(frameDelay-frameTime);
+            SDL_Delay(frameDelay - frameTime);
         }
     }
     g->Clear();

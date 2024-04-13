@@ -1,38 +1,37 @@
-#include"player.h"
-void player::Gravity(){
-		jumpHeight += gravity;
-		Ypos += jumpHeight;
-		if(Ypos > 376) Ypos = 376;
-		if(Ypos < 0) Ypos = 0;
-		setDest(90,Ypos,34,24);
-	
+#include "player.h"
+#include "gameloop.h"
+player::player()
+{
+    Gameloop::PLAYER.push_back(this);
 }
 
-void player::Render(SDL_Renderer* ren, int x)
+void player::init(short MaxSkin, short ms)
 {
-	SDL_Rect src = getSrc();
-	SDL_Rect dest = getDest();
-	SDL_RenderCopy(ren, Texts[x], &src, &dest);
-	//SDL_RenderCopyEx(ren, Texts[x] ,&src, &dest, 0, NULL, SDL_FLIP_NONE);
+    maxSkin = MaxSkin;
+    msPF = ms;
+    src.w /= MaxSkin;
+    SetRect(src.w, src.h);
 }
-void player::Jump()
+
+void player::update()
 {
-	jumpHeight = -3;
+    if ((Gameloop::timer - LastChange) * (1000 / Gameloop::FPS) >= msPF * item::slow)
+    {
+        LastChange = Gameloop::timer;
+        skin++;
+        skin %= maxSkin;
+        src.x = skin * src.w;
+    }
+    jumpheight += gra;
+
+    y += jumpheight;
+    if (y < 0)
+        y = 0;
+    if (y > (400 - dest.h))
+        y = 400 - dest.h;
 }
-void player::Render(SDL_Renderer* ren)
+
+void player::jump()
 {
-	SDL_Rect src = getSrc();
-	SDL_Rect dest = getDest();
-	SDL_RenderCopy(ren, text, &src, &dest);
-}
-void player::tele(){
-	Xpos -= 1;
-	if(Xpos < -642) Xpos = 0;
-	setDest(Xpos,400,642*2,112);
-}
-void player::tele1(){
-	Xpos += 0.5;
-	if(Xpos > 273) Xpos = 0;
-	
-	setSrc(Xpos,0,642,512);
+    jumpheight = -3;
 }

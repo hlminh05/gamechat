@@ -1,17 +1,26 @@
 #pragma once
-#include"Header.cpp"
-class object{
-    private:
-        SDL_Rect src1, dest1;
-        SDL_Texture* Tex = nullptr;
-    public:
-        object();
-        void CreateTexture(const char* address,SDL_Renderer* ren);
-        SDL_Texture* getTexture();
-        SDL_Rect getSrc();
-        SDL_Rect getDest();
-        void setSrc(int x, int y, int w, int h);
-        void setDest(int x, int y, int w, int h);
-        bool Collision(SDL_Rect A, SDL_Rect B);
-        
+#include "Header.cpp"
+class object
+{
+private:
+    SDL_Texture *image = nullptr;
+
+public:
+    SDL_Rect dest;
+    SDL_Rect src;
+    double x = 0, y = 0;
+    double width, height;
+    double scale = 1;
+
+    void FixData();
+
+    void SetImage(const char *address);
+    void Draw();
+    void SetPos(double x, double y);
+    void SetScale(double x);
+    void SetRect(int w, int h);
+
+    SDL_Rect getDest();
+
+    bool Collision(SDL_Rect A);
 };
