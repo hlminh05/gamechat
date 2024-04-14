@@ -206,10 +206,12 @@ void Gameloop::Update()
 {
     if (texScore != nullptr)
         SDL_DestroyTexture(texScore);
-    std::string SC = "Score : " + std::to_string(score) + " - break: " + std::to_string(breakout);
+    std::string SC = "Score : " + std::to_string(score) + " - break: " + breakout;
     texScore = TextureManager::LoadText(SC.c_str(), srcScore);
     destScore.w = srcScore.w;
     destScore.h = srcScore.h;
+
+    // pipe
     for (auto &pp : PIPE)
     {
         pp->move();
@@ -229,19 +231,22 @@ void Gameloop::Update()
     }
     else if (inSpecial && (timer - start_Special) % 100 == 0)
         addItem(false);
-    // if (timer == FPS * 10000 / 1000)
-    //     addItem(true);
 
+    // bkg
     for (auto &bk : BKG)
     {
         bk->slip();
         bk->FixData();
     }
+
+    // player
     for (auto &player : PLAYER)
     {
         player->update();
         player->FixData();
     }
+
+    // item
     for (auto &item : ITEM)
     {
         if (item->type == "bom" || item->type == "rocket")
@@ -255,14 +260,16 @@ void Gameloop::Update()
         item->FixData();
         for (auto &player : PLAYER)
         {
+            if (player->scale >= 2.25)
+                Gameloop::breakout = "on";
+            else
+                breakout = "off";
             if (item->Collision(player->dest))
             {
                 item->respawn();
                 if (item->type == "tao")
                 {
                     player->scale += 0.25;
-                    if (player->scale >= 2.25)
-                        Gameloop::breakout = 1;
                 }
 
                 else if (item->type == "special")
@@ -290,7 +297,6 @@ void Gameloop::Update()
                     {
                         player->scale = 1;
                         item->val = -10;
-                        breakout--;
                     }
                     else
                     {
