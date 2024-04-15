@@ -25,7 +25,7 @@ void object::SetImage(const char *address)
 
 void object::Draw()
 {
-
+	FixData();
 	SDL_RenderCopy(Gameloop::renderer, image, &src, &dest);
 }
 

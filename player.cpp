@@ -10,6 +10,7 @@ void player::init(short MaxSkin, short ms)
     maxSkin = MaxSkin;
     msPF = ms;
     src.w /= MaxSkin;
+    src.h /= maxForm;
     SetRect(src.w, src.h);
 }
 
@@ -21,6 +22,7 @@ void player::update()
         skin++;
         skin %= maxSkin;
         src.x = skin * src.w;
+        src.y = form * src.h;
     }
     jumpheight += gra;
 

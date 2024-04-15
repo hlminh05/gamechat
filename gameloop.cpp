@@ -2,15 +2,17 @@
 #include "Object.h"
 #include "bkg.h"
 
+bool Gameloop::GameState = false;
 int Gameloop::score = 0;
 int Gameloop::timer = 0;
 int Gameloop::FPS = 120;
+
 int Gameloop::HEIGHT = 512;
 int Gameloop::WIDTH = 624;
 SDL_Window *Gameloop::window = nullptr;
 SDL_Renderer *Gameloop::renderer = nullptr;
-bool Gameloop::GameState = false;
 SDL_Event Gameloop::event;
+
 std::vector<bkg *> Gameloop::BKG;
 std::vector<item *> Gameloop::ITEM;
 std::vector<player *> Gameloop::PLAYER;
@@ -36,7 +38,7 @@ bool Gameloop::GetGameState()
 void Gameloop::CreateWindow()
 {
     SDL_Init(SDL_INIT_EVERYTHING);
-    window = SDL_CreateWindow("Flappy nigga", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, 0);
+    window = SDL_CreateWindow("Flappy happy", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, 0);
     if (window)
     {
         renderer = SDL_CreateRenderer(window, -1, 0);
@@ -54,7 +56,7 @@ void Gameloop::CreateWindow()
     }
     TTF_Init();
     TextureManager::font = TTF_OpenFont("font/font2.ttf", 24);
-    TextureManager::color = {255, 255, 255};
+    TextureManager::color = {0, 0, 0};
 }
 
 void Gameloop::addItem(bool t)
@@ -75,7 +77,7 @@ void Gameloop::addItem(bool t)
         it->SetPos(-100, rand() % (400 - it->dest.h));
         it->type = "chuoi";
         it->space = 1800;
-        it->val = 1;
+        it->val = 3;
         it->SetScale(0.2);
         it->speed_item = 5;
 
@@ -129,6 +131,20 @@ void Gameloop::clearItem()
     }
 }
 
+void Gameloop::initBKG()
+{
+    bkg *bk = new bkg;
+    bk->SetImage("img/bg.png");
+    bk->SetPos(0, 0);
+    bk->SetRect(Gameloop::WIDTH * 2, Gameloop::HEIGHT);
+    bk->speed = 1;
+
+    bk = new bkg;
+    bk->SetImage("img/base.png");
+    bk->SetPos(0, 400);
+    bk->SetRect(Gameloop::WIDTH * 2, bk->getDest().h);
+    bk->speed = 2;
+}
 void Gameloop::Initialize()
 {
     std::string HSCORE;
@@ -144,20 +160,12 @@ void Gameloop::Initialize()
     timer = 0;
 
     srand(time(NULL));
-    bkg *bk = new bkg;
-    bk->SetImage("img/bg.png");
-    bk->SetPos(0, 0);
-    bk->SetRect(Gameloop::WIDTH * 2, Gameloop::HEIGHT);
-    bk->speed = 1;
-
-    bk = new bkg;
-    bk->SetImage("img/base.png");
-    bk->SetPos(0, 400);
-    bk->SetRect(Gameloop::WIDTH * 2, bk->getDest().h);
-    bk->speed = 2;
+    initBKG();
 
     player *chim = new player;
     chim->SetImage("img/chim.png");
+    chim->maxForm = 2;
+    chim->maxSkin = 3;
     chim->init(3, 100);
     chim->SetPos(50, 50);
 
@@ -206,7 +214,7 @@ void Gameloop::Update()
 {
     if (texScore != nullptr)
         SDL_DestroyTexture(texScore);
-    std::string SC = "Score : " + std::to_string(score) + " - break: " + breakout;
+    std::string SC = "Score : " + std::to_string(score);
     texScore = TextureManager::LoadText(SC.c_str(), srcScore);
     destScore.w = srcScore.w;
     destScore.h = srcScore.h;
@@ -260,10 +268,17 @@ void Gameloop::Update()
         item->FixData();
         for (auto &player : PLAYER)
         {
-            if (player->scale >= 2.25)
+            if (player->scale >= 1.75)
+            {
                 Gameloop::breakout = "on";
+                player->form = 1;
+            }
+
             else
+            {
                 breakout = "off";
+                player->form = 0;
+            }
             if (item->Collision(player->dest))
             {
                 item->respawn();
@@ -293,7 +308,7 @@ void Gameloop::Update()
                 }
                 else if (item->type == "bom" || item->type == "rocket")
                 {
-                    if (player->scale >= 2.25)
+                    if (player->form == 1)
                     {
                         player->scale = 1;
                         item->val = -10;
@@ -341,10 +356,26 @@ void Gameloop::Render()
 
 void Gameloop::Close()
 {
-}
+    for (auto &a : PIPE)
+    {
+        delete a;
+    }
+    PIPE.clear();
+    for (auto &a : PLAYER)
+    {
+        delete a;
+    }
+    PLAYER.clear();
+    for (auto &a : ITEM)
+    {
+        delete a;
+    }
+    ITEM.clear();
+    for (auto &a : BKG)
+    {
+        delete a;
+    }
 
-void Gameloop::Clear()
-{
     if (score > HightScore)
     {
         std::ofstream o;
@@ -352,6 +383,20 @@ void Gameloop::Clear()
         o << score;
         o.close();
     }
+
+    BKG.clear();
+    inSpecial = false;
+    start_Special = -5000;
+    breakout = "off";
+    GameState = false;
+    score = 0;
+    timer = 0;
+    FPS = 120;
+    item::slow = 1;
+}
+
+void Gameloop::Clear()
+{
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 }

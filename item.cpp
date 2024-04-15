@@ -13,7 +13,7 @@ void item::SlowAllItem(short ms)
 {
     time_slow = ms;
     start_slow = Gameloop::timer;
-    slow = 5;
+    slow = 3;
 }
 void item::tele()
 {
