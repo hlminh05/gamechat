@@ -16,7 +16,7 @@ Em tự nhận game của em thuộc ngưỡng điểm 7.5 - 8
 
 Game em không dùng thuật toán nằm ngoài chương trình mà chỉ dùng những hàm cơ bản
 
-Game gồm hoạt ảnh chuyển động của chim, ảnh nền và các cật phẩm
+Game gồm hoạt ảnh chuyển động của chim, ảnh nền và các vật phẩm
 
 
 # Quá trình làm game
