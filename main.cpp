@@ -2,8 +2,8 @@
 #include "menu.h"
 
 Gameloop *g = new Gameloop();
-const int FPS = Gameloop::FPS;
-const int frameDelay = 1000 / FPS;
+const float FPS = Gameloop::FPS;
+const float frameDelay = 1000 / FPS;
 
 Uint32 frameStart;
 int frameTime;
@@ -43,7 +43,6 @@ int main(int argc, char *args[])
         if (Command == "replay") /// CM replay
         {
             Command = "start";
-            std::cout << 2 << '\n';
         }
         else
             Command = menu->update();

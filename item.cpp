@@ -23,7 +23,7 @@ void item::tele()
         slow = 1;
     }
     x -= speed_item / slow;
-    if (Gameloop::score >= 70 && type == "bom")
+    if (Gameloop::score >= 50 && type == "bom")
     {
         if (sin(1.0 * 2 * 3.14 * (Gameloop::timer % 100) / 100) >= 0) // hard
             y += speed_item * 0.6 / item::slow;
