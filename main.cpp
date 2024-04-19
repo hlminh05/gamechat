@@ -107,14 +107,8 @@ int main(int argc, char *args[])
             }
             rePlay->close();
             g->Close();
-
-            // if (Command == "replay")
-            // {
-            //     Command = "let replay";
-            //     std::cout << 1 << '\n';
-            //     continue;
-            // }
         }
+
         { /// render
             SDL_RenderClear(Gameloop::renderer);
             for (auto &bk : Gameloop::BKG)
@@ -132,7 +126,6 @@ int main(int argc, char *args[])
         }
     }
     menu->close();
-    // g->Close();
     g->Clear();
     return 0;
 }

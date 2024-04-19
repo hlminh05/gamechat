@@ -13,6 +13,5 @@ void pipe::move()
     if (x < -dest.w)
     {
         x = Gameloop::WIDTH;
-        // y = 400 - dest.h;
     }
 }

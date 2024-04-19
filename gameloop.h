@@ -33,7 +33,6 @@ public:
     short start_Special = -5000;
     static int score;
     int HightScore;
-    std::string breakout = "off";
 
     void Initialize();
     void addItem(bool t = true);

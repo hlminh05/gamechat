@@ -54,6 +54,7 @@ void Gameloop::CreateWindow()
     {
         std::cout << "window not created!" << std::endl;
     }
+
     TTF_Init();
     TextureManager::font = TTF_OpenFont("font/font2.ttf", 24);
     TextureManager::color = {0, 0, 0};
@@ -194,6 +195,10 @@ void Gameloop::Event()
     }
     if (event.type == SDL_MOUSEBUTTONDOWN)
     {
+        for (auto &chim : PLAYER)
+        {
+            chim->jump();
+        }
         std::cout << "press start!" << std::endl;
     }
     if (event.type == SDL_KEYDOWN)
@@ -270,13 +275,11 @@ void Gameloop::Update()
         {
             if (player->scale >= 1.75)
             {
-                Gameloop::breakout = "on";
                 player->form = 1;
             }
 
             else
             {
-                breakout = "off";
                 player->form = 0;
             }
             if (item->Collision(player->dest))
@@ -323,7 +326,6 @@ void Gameloop::Update()
         }
     }
 }
-
 void Gameloop::Render()
 {
     SDL_RenderClear(renderer);
@@ -387,7 +389,6 @@ void Gameloop::Close()
     BKG.clear();
     inSpecial = false;
     start_Special = -5000;
-    breakout = "off";
     GameState = false;
     score = 0;
     timer = 0;
