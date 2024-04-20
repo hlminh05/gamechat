@@ -22,7 +22,7 @@ int main(int argc, char *args[])
         menu->SetPos(Gameloop::WIDTH / 2 - 20, Gameloop::HEIGHT / 2);
         menu->isRunning = true;
     }
-    {
+    { // intit BKG
         Gameloop::initBKG();
     }
 
