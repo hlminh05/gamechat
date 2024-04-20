@@ -34,13 +34,15 @@ Em có tham khảo nguồn trên youtube: (https://www.youtube.com/@askarihassan
  * Ăn nho sẽ vào vùng ăn toàn chỉ gồm các loại quả
  * khi chim đạt 1 độ to nhất định chim sẽ nhấp nháy và có thể đâm 1 vật cản boom hoặc tên lửa
 
+
+
 # Demo
 
-[![](https://img.youtube.com/vi/XW74gtRVfHI/maxresdefault.jpg)](https://www.youtube.com/watch?v=XW74gtRVfHI)
+[![](https://img.youtube.com/vi/F7vRSgvcrio/maxresdefault.jpg)](https://www.youtube.com/watch?v=F7vRSgvcrio)
 
 # Kết luận
+Em mong sẽ nhận được điểm số phù hợp.
 
-Em mong được 8 điểm 🙏🙏🙏
 
 
 
