@@ -41,7 +41,7 @@ public:
     void Update();
     void Render();
     void Close();
-    void initBKG();
+    static void initBKG();
 
     void Clear();
 };

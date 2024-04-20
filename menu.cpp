@@ -33,7 +33,7 @@ std::string Menu::update()
 }
 void Menu::render()
 {
-    if (SDL_GetTicks() - eventDelay < 1000)
+    if (SDL_GetTicks() - eventDelay < 800)
         return;
     for (auto &b : BUTTON)
         b->Draw();

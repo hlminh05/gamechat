@@ -22,18 +22,8 @@ int main(int argc, char *args[])
         menu->SetPos(Gameloop::WIDTH / 2 - 20, Gameloop::HEIGHT / 2);
         menu->isRunning = true;
     }
-    { /// init Menu BKG
-        bkg *bk = new bkg;
-        bk->SetImage("img/bg.png");
-        bk->SetPos(0, 0);
-        bk->SetRect(Gameloop::WIDTH * 2, Gameloop::HEIGHT);
-        bk->speed = 1;
-
-        bk = new bkg;
-        bk->SetImage("img/base.png");
-        bk->SetPos(0, 400);
-        bk->SetRect(Gameloop::WIDTH * 2, bk->getDest().h);
-        bk->speed = 2;
+    {
+        Gameloop::initBKG();
     }
 
     while (menu->isRunning) /// Menu Loop
