@@ -312,14 +312,13 @@ void Gameloop::Update()
                 }
                 else if (item->type == "bom" || item->type == "rocket")
                 {
-                    if (player->form == 1)
+                    if (player->scale >= 1.75)
                     {
+                        score -= 10;
                         player->scale = 1;
-                        item->val = -10;
                     }
                     else
                     {
-                        item->val = 0;
                         Gameloop::GameState = false;
                     }
                 }
