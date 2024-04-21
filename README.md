@@ -37,7 +37,7 @@ Em có tham khảo nguồn trên youtube: (https://www.youtube.com/@askarihassan
 
 # Demo
 
-[![](https://img.youtube.com/vihsR0m_mUgpo/maxresdefault.jpg)](https://www.youtube.com/watch?v=hsR0m_mUgpo)
+[![](https://img.youtube.com/vi/hsR0m_mUgpo/maxresdefault.jpg)](https://www.youtube.com/watch?v=hsR0m_mUgpo)
 
 # Kết luận
 Em mong sẽ nhận được điểm số phù hợp.
