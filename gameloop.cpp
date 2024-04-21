@@ -37,6 +37,7 @@ bool Gameloop::GetGameState()
 
 void Gameloop::CreateWindow()
 {
+
     SDL_Init(SDL_INIT_EVERYTHING);
     window = SDL_CreateWindow("Flappy happy", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, 0);
     if (window)

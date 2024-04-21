@@ -4,16 +4,17 @@
 Gameloop *g = new Gameloop();
 const float FPS = Gameloop::FPS;
 const float frameDelay = 1000 / FPS;
+Mix_Music *music = nullptr;
 
 Uint32 frameStart;
 int frameTime;
 int main(int argc, char *args[])
 {
+
     Gameloop::CreateWindow();
 
     Menu *menu = new Menu;
     std::string Command = "none";
-
     { /// init Menu
         menu->addButton("start", "img/play.png");
         menu->SetPos(Gameloop::WIDTH / 2 - 20, -50 + Gameloop::HEIGHT / 2);
@@ -25,6 +26,13 @@ int main(int argc, char *args[])
     { // intit BKG
         Gameloop::initBKG();
     }
+
+    int format = MIX_INIT_OGG;
+    Mix_Init(format);
+    Mix_OpenAudio(44100, AUDIO_S32SYS, 2, 4096);
+    music = Mix_LoadMUS("sound/nhac.ogg");
+
+    Mix_PlayMusic(music, -1);
 
     while (menu->isRunning) /// Menu Loop
     {
@@ -52,7 +60,6 @@ int main(int argc, char *args[])
             g->Initialize();
             while (g->GetGameState())
             {
-
                 frameStart = SDL_GetTicks();
                 Gameloop::timer++;
                 g->Event();
@@ -116,5 +123,8 @@ int main(int argc, char *args[])
     }
     menu->close();
     g->Clear();
+    Mix_FreeMusic(music);
+    Mix_CloseAudio();
+    Mix_Quit();
     return 0;
 }
