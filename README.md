@@ -14,10 +14,9 @@ Game phản xạ giúp chim ăn quả vượt chướng ngại vật.
 
 Em tự nhận game của em thuộc ngưỡng điểm 7.5 - 8
 
-Game em không dùng thuật toán nằm ngoài chương trình mà chỉ dùng những hàm cơ bản
-
 Game gồm hoạt ảnh chuyển động của chim, ảnh nền và các vật phẩm
 
+Có nhạc nền khi chơi
 
 # Quá trình làm game
 Em có tham khảo nguồn trên youtube: (https://www.youtube.com/@askarihassan2632) và biến tấu game khác đi.
@@ -38,7 +37,7 @@ Em có tham khảo nguồn trên youtube: (https://www.youtube.com/@askarihassan
 
 # Demo
 
-[![](https://img.youtube.com/vi/F7vRSgvcrio/maxresdefault.jpg)](https://www.youtube.com/watch?v=F7vRSgvcrio)
+[![](https://img.youtube.com/vi/hsR0m_mUgpo/maxresdefault.jpg)](https://www.youtube.com/watch?v=hsR0m_mUgpo)
 
 # Kết luận
 Em mong sẽ nhận được điểm số phù hợp.
