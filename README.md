@@ -12,7 +12,7 @@ Game phản xạ giúp chim ăn quả vượt chướng ngại vật.
 
 # Tự đánh giá
 
-Em tự nhận game của em thuộc ngưỡng điểm 7.5 - 8
+Em tự nhận game của em thuộc ngưỡng điểm 7.5 - 8.5
 
 Game gồm hoạt ảnh chuyển động của chim, ảnh nền và các vật phẩm
 
